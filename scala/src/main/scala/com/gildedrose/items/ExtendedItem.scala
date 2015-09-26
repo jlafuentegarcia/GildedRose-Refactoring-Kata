@@ -7,18 +7,12 @@ import com.gildedrose.Item
  */
 
 object ExtendedItem {
-  implicit def Item2ExtendedItem(item : Item) : ExtendedItem = {
-    if ( item.name.equals("Aged Brie")) {
-      new AgedBrie(item)
-    } else if ( item.name.equals("Sulfuras, Hand of Ragnaros") ) {
-      new Sulfuras(item)
-    } else if ( item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-      new BackstagePasses(item)
-    } else if ( item.name.equals("Conjured")) {
-      new Conjured(item)
-    } else {
-      new ExtendedItem(item)
-    }
+  implicit def Item2ExtendedItem(item : Item) : ExtendedItem = item.name match {
+    case "Aged Brie" => new AgedBrie(item)
+    case "Sulfuras, Hand of Ragnaros" => new Sulfuras(item)
+    case "Backstage passes to a TAFKAL80ETC concert" => new BackstagePasses(item)
+    case "Conjured" => new Conjured(item)
+    case _ => new ExtendedItem(item)
   }
 }
 
