@@ -17,17 +17,17 @@ object ExtendedItem {
 }
 
 class ExtendedItem (private var item : Item) {
-  def increaseQuality() = {
+  protected def increaseQuality() = {
     if ( item.quality < 50 )
       item.quality = item.quality + 1
   }
 
-  def decreaseQuality() = {
+  protected def decreaseQuality() = {
     if ( item.quality > 0 )
       item.quality = item.quality - 1
   }
 
-  def decreaseSellIn() = {
+  private def decreaseSellIn() = {
     item.sellIn = item.sellIn - 1
   }
 
@@ -36,7 +36,7 @@ class ExtendedItem (private var item : Item) {
     updateQuality()
   }
 
-  def updateQuality() = {
+  protected def updateQuality() = {
     decreaseQuality()
     if ( item.sellIn < 0 )
       decreaseQuality()
