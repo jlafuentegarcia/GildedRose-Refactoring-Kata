@@ -7,7 +7,7 @@ import com.gildedrose.Item
  */
 class Conjured (item : Item) extends ExtendedItem (item) {
   protected override def updateQuality() = {
-    decreaseQuality()
-    decreaseQuality()
+    super.updateQuality()
+    super.updateQuality()
   }
 }

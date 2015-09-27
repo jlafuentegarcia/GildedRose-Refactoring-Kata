@@ -10,21 +10,21 @@ class GildedRoseTest  extends FlatSpec with Matchers {
     (app.items(0).name) should equal("foo")
   }
 
-  it should "Sulfuras never change quality" in {
+  "Sulfuras" should "never change quality" in {
     val items = Array[Item](new Item("Sulfuras, Hand of Ragnaros", 0, 80))
     val app = new GildedRose(items)
     app.updateQuality()
     (app.items(0).quality) should equal(80)
   }
 
-  it should "Normal items always decrease quality" in {
+  "Normal Items" should "always decrease quality" in {
     val items = Array[Item](new Item("Normal Item", 10, 30))
     val app = new GildedRose(items)
     app.updateQuality()
     (app.items(0).quality) should equal(29)
   }
 
-  it should "Normal items always decrease quality by two when sellin Passed" in {
+  "Normal Items" should "always decrease quality by two when sellin Passed" in {
     val items = Array[Item](new Item("Normal Item", 0, 30), new Item("Normal Item", -3, 30))
     val app = new GildedRose(items)
     app.updateQuality()
@@ -32,42 +32,46 @@ class GildedRoseTest  extends FlatSpec with Matchers {
     (app.items(1).quality) should equal(28)
   }
 
-  it should "Quality is never negative" in {
+  "Quality" should "never be negative" in {
     val items = Array[Item](new Item("Normal Item", 0, 0))
     val app = new GildedRose(items)
     app.updateQuality()
     (app.items(0).quality) should equal(0)
   }
 
-  it should "decrease sellIn" in {
-    val items = Array[Item](new Item("Normal Item", 1, 1))
+  "SellIn" should "always decrease" in {
+    val items = Array[Item](new Item("Normal Item", 1, 1),
+                            new Item("Sulfuras, Hand of Ragnaros", 1, 80),
+                            new Item("Aged Brie", 1, 10),
+                            new Item("Backstage passes to a TAFKAL80ETC concert", 1, 15 ),
+                            new Item("Backstage passes to a TAFKAL80ETC concert", -3, 15 ))
     val app = new GildedRose(items)
     app.updateQuality()
     (app.items(0).sellIn) should equal(0)
+    (app.items(1).sellIn) should equal(0)
+    (app.items(2).sellIn) should equal(0)
+    (app.items(3).sellIn) should equal(0)
+    (app.items(4).sellIn) should equal(-4)
   }
 
-  it should "decrease sellIn under 0" in {
-    val items = Array[Item](new Item("Normal Item", 0, 1))
-    val app = new GildedRose(items)
-    app.updateQuality()
-    (app.items(0).sellIn) should equal(-1)
-  }
-
-  it should "increase Aged Brie quality" in {
+  "Aged Brie" should "increase quality" in {
     val items = Array[Item](new Item("Aged Brie", 10, 1))
     val app = new GildedRose(items)
     app.updateQuality()
     (app.items(0).quality) should equal(2)
   }
 
-  it should "never increase Aged Brie quality over 50" in {
-    val items = Array[Item](new Item("Aged Brie", 10, 50))
+  "Quality" should "never increase over 50" in {
+    val items = Array[Item](new Item("Aged Brie", 10, 50),
+                            new Item("Backstage passes to a TAFKAL80ETC concert", 1, 50 )
+    )
     val app = new GildedRose(items)
     app.updateQuality()
     (app.items(0).quality) should equal(50)
+    (app.items(1).quality) should equal(50)
   }
 
-  it should "keep backstage passes quality when sellin > 10" in {
+  "Backstage Passes" should "increase quality by one when sellin > 10" in {
     for ( si <- 11 until 15) {
       val items = Array[Item](new Item("Backstage passes to a TAFKAL80ETC concert", si, 10))
       val app = new GildedRose(items)
@@ -76,7 +80,7 @@ class GildedRoseTest  extends FlatSpec with Matchers {
     }
   }
 
-  it should "add 2 to backstage passes quality when sellin > 5 && <= 10" in {
+  "Backstage Passes" should "increase quality by 2 when sellin > 5 && <= 10" in {
     for ( si <- 6 until 10) {
       val items = Array[Item](new Item("Backstage passes to a TAFKAL80ETC concert", si, 10))
       val app = new GildedRose(items)
@@ -85,7 +89,7 @@ class GildedRoseTest  extends FlatSpec with Matchers {
     }
   }
 
-  it should "add 3 to backstage passes quality when sellin <= 5 && > 0" in {
+  "Backstage Passes" should "increase quality by 3 when sellin <= 5 && > 0" in {
     for ( si <- 1 until 5) {
       val items = Array[Item](new Item("Backstage passes to a TAFKAL80ETC concert", si, 10))
       val app = new GildedRose(items)
@@ -94,7 +98,7 @@ class GildedRoseTest  extends FlatSpec with Matchers {
     }
   }
 
-  it should "set backstage passes quality to 0 when sellIn <= 0" in {
+  "Backstage Passes" should "set quality to 0 when sellIn <= 0" in {
     for ( si <- -10 until 0) {
       val items = Array[Item](new Item("Backstage passes to a TAFKAL80ETC concert", si, 10))
       val app = new GildedRose(items)
@@ -103,17 +107,11 @@ class GildedRoseTest  extends FlatSpec with Matchers {
     }
   }
 
-  it should "never increase backstage passes quality over 50" in {
-    val items = Array[Item](new Item("Backstage passes to a TAFKAL80ETC concert", 7, 50))
-    val app = new GildedRose(items)
-    app.updateQuality()
-    (app.items(0).quality) should equal(50)
-  }
-
-  it should "decrease conjured items by two" in {
-    val items = Array[Item](new Item("Conjured", 7, 20))
+  "Conjured Items" should "decrease quality by twice the normal ones" in {
+    val items = Array[Item](new Item("Conjured", 7, 20), new Item("Conjured", 0, 20))
     val app = new GildedRose(items)
     app.updateQuality()
     (app.items(0).quality) should equal(18)
+    (app.items(1).quality) should equal(16)
   }
 }
